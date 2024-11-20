@@ -51,8 +51,9 @@ class PangeaAIGuard(BaseTool):
             ai_guard.invoke("My Name is John Doe and my email is john.doe@email.com.  My credit card number is 5555555555554444.")
     """
 
-    name: str = "Pangea AI Guard Tool"
-    """Name of the tool."""
+    """Name of the tool"""
+    name: str = "pangea-ai-guard-tool"
+
     description: str = "Uses Pangea's AI Guard service to monitor, sanitize, and protect sensitive data."
     """Description of the tool."""
 
@@ -81,7 +82,7 @@ class PangeaAIGuard(BaseTool):
 
         if not pangea_token or not pangea_token.get_secret_value() or pangea_token.get_secret_value() == "":
             raise ValueError(f"'{pangea_token_env_key_name}' must be set or passed")
-        
+
         super().__init__()
         self._recipe = recipe
         self._client = AIGuard(token=pangea_token.get_secret_value(), config=config, config_id=config_id)

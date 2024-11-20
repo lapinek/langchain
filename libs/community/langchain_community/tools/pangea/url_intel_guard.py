@@ -47,10 +47,11 @@ class PangeaUrlIntelGuard(BaseTool):
             tool.run("Please click here to confirm your order:http://113.235.101.11:54384/order/123 .  Leave us a feedback here: http://malware123.com/feedback")
     """
 
-    name: str = "Pangea URL Intel Tool"
     """Name of the tool."""
-    description: str = "This tool finds malicious urls in the input text using the Pangea URL Intel service."
+    name: str = "pangea-url-intel-guard-tool"
+
     """Description of the tool."""
+    description: str = "This tool finds malicious urls in the input text using the Pangea URL Intel service."
 
     _threshold: int = 80
     _url_pattern: ClassVar[str] = r"(https?://(?:[a-zA-Z0-9.-]+|(?:\d{1,3}\.){3}\d{1,3})(?::\d+)?)(?:/|$)"

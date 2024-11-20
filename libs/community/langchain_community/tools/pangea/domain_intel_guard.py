@@ -46,10 +46,11 @@ class PangeaDomainIntelGuard(BaseTool):
             tool.run("Please click here to confirm your order:http://737updatesboeing.com/order/123 .  Leave us a feedback here: http://malware123.com/feedback")
     """
 
-    name: str = "Pangea Domain Intel Tool"
     """Name of the tool."""
-    description: str = "This tool finds malicious domains in the input text using the Pangea Domain Intel service."
+    name: str = "pangea-domain-intel-guard-tool"
+
     """Description of the tool."""
+    description: str = "This tool finds malicious domains in the input text using the Pangea Domain Intel service."
 
     _threshold: int = 80
     _domain_pattern: ClassVar[str] = r"https?://(?:www\.)?([a-zA-Z0-9.-]+)(?::\d+)?"
@@ -84,7 +85,7 @@ class PangeaDomainIntelGuard(BaseTool):
 
         # Find all Domains using the regex pattern
         domains = re.findall(self._domain_pattern, input_text)
-        
+
         # If no domains found return the original text
         if len(domains) == 0:
             return input_text

@@ -47,10 +47,11 @@ class PangeaIpIntelGuard(BaseTool):
             tool.run("Please click here to confirm your order:http://113.235.101.11:54384/order/123 .  Leave us a feedback here: http://malware123.com/feedback")
     """
 
-    name: str = "Pangea Ip Intel Tool"
     """Name of the tool."""
-    description: str = "This tool finds malicious ips in the input text using the Pangea Ip Intel service."
+    name: str = "pangea-ip-intel-guard-tool"
+
     """Description of the tool."""
+    description: str = "This tool finds malicious ips in the input text using the Pangea Ip Intel service."
 
     _threshold: int = 80
     _ip_pattern: ClassVar[str] = r"\b(?:\d{1,3}\.){3}\d{1,3}\b"
@@ -91,7 +92,7 @@ class PangeaIpIntelGuard(BaseTool):
 
         # Check the reputation of each Ip found
         intel = self._ip_intel_client.reputation_bulk(ips)
-        
+
         if not intel.result:
             raise PangeaIpGuardError("Result is invalid or missing")
 

@@ -50,10 +50,11 @@ class PangeaRedactGuard(BaseTool):
             redact_guard.invoke("My name is Dennis Nedry and my email is you.didnt.say.the.magic.word@gmail.com")
     """
 
-    name: str = "Pangea Redact Tool"
     """Name of the tool."""
-    description: str = "This tool redacts sensitive information from prompts using the Pangea Redact service."
+    name: str = "pangea-redact-guard-tool"
+
     """Description of the tool."""
+    description: str = "This tool redacts sensitive information from prompts using the Pangea Redact service."
 
     def __init__(
         self,
