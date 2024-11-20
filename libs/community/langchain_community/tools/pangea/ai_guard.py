@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import SecretStr
 
 from langchain_core._api import beta
-from langchain.tools import BaseTool
+from langchain_community.tools.pangea.base import PangeaBaseTool
 
 try:
     from pangea import PangeaConfig
@@ -23,7 +23,7 @@ class PangeaAIGuardError(RuntimeError):
 
 
 @beta(message="Pangea AI Guard service is in beta. Subject to change.")
-class PangeaAIGuard(BaseTool):
+class PangeaAIGuard(PangeaBaseTool):
     """
     Use Pangea's AI Guard service to monitor, sanitize, and protect sensitive data.
 
@@ -54,7 +54,11 @@ class PangeaAIGuard(BaseTool):
     name: str = "pangea-ai-guard-tool"
     """Name of the tool."""
 
-    description: str = "Uses Pangea's AI Guard service to monitor, sanitize, and protect sensitive data."
+    description: str = """
+    Identifies and redacts PII and sensitive information in AI prompts, responses, and RAG context data.
+    Detects and blocks malware submitted by users or ingested via agents or RAG file ingestion.
+    Flags or hides malicious IP addresses, domains, and URLs embedded in prompts, responses, or data vectors.
+    """
     """Description of the tool."""
 
     _client: AIGuard
@@ -87,7 +91,7 @@ class PangeaAIGuard(BaseTool):
         self._recipe = recipe
         self._client = AIGuard(token=token.get_secret_value(), config=config, config_id=config_id)
 
-    def _run(self, input_text: str) -> str:
+    def _process_text(self, input_text: str) -> str:
 
         # Guard the input_text
         guarded = self._client.guard_text(input_text, recipe=self._recipe)

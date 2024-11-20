@@ -52,14 +52,16 @@ def pangea_domain_intel_guard() -> PangeaDomainIntelGuard:
 # Run domain as a tool for agents
 def test_domain_intel_tool(pangea_domain_intel_guard: PangeaDomainIntelGuard) -> None:
     prompt = "Leave us a feedback here: http://737updatesboeing.com/feedback."
-    with pytest.raises(PangeaDomainGuardError, match="Malicious domains found in the provided input."):
-        pangea_domain_intel_guard.run(prompt)
+    expected = "Malicious domain(s) found in the provided input."
+    response = pangea_domain_intel_guard.run(prompt)
+    assert response == expected, f"Error {response}"
 
 # Run domain as a runnable for chains
 def test_domain_intel_runnable(pangea_domain_intel_guard: PangeaDomainIntelGuard) -> None:
     prompt = "Leave us a feedback here: http://737updatesboeing.com/feedback."
-    with pytest.raises(PangeaDomainGuardError, match="Malicious domains found in the provided input."):
-        pangea_domain_intel_guard.invoke(prompt)
+    expected = "Malicious domain(s) found in the provided input."
+    response = pangea_domain_intel_guard.invoke(prompt)
+    assert response == expected, f"Error {response}"
 
 # Pangea IP Intel integration tests
 @pytest.fixture()
@@ -71,14 +73,16 @@ def pangea_ip_intel_guard() -> PangeaIpIntelGuard:
 # Run IP as a tool for agents
 def test_ip_intel_tool(pangea_ip_intel_guard: PangeaIpIntelGuard) -> None:
     prompt = "Please click here to confirm your order: http://113.235.101.11:54384/order/123."
-    with pytest.raises(PangeaIpGuardError, match="Malicious IPs found in the provided input."):
-        pangea_ip_intel_guard.run(prompt)
+    expected = "Malicious IP(s) found in the provided input."
+    response = pangea_ip_intel_guard.run(prompt)
+    assert response == expected, f"Error {response}"
 
 # Run IP as a runnable for chains
 def test_ip_intel_runnable(pangea_ip_intel_guard: PangeaIpIntelGuard) -> None:
     prompt = "Please click here to confirm your order: http://113.235.101.11:54384/order/123."
-    with pytest.raises(PangeaIpGuardError, match="Malicious IPs found in the provided input."):
-        pangea_ip_intel_guard.invoke(prompt)
+    expected = "Malicious IP(s) found in the provided input."
+    response = pangea_ip_intel_guard.invoke(prompt)
+    assert response == expected, f"Error {response}"
 
 # Pangea URL Intel integration tests
 @pytest.fixture()
@@ -90,14 +94,16 @@ def pangea_url_intel_guard() -> PangeaUrlIntelGuard:
 # Run URL as a tool for agents
 def test_url_intel_tool(pangea_url_intel_guard: PangeaUrlIntelGuard) -> None:
     prompt = "Summarize this: http://113.235.101.11:54384"
-    with pytest.raises(PangeaUrlGuardError, match="Malicious URLs found in the provided input."):
-        pangea_url_intel_guard.run(prompt)
+    expected = "Malicious URL(s) found in the provided input."
+    response = pangea_url_intel_guard.run(prompt)
+    assert response == expected, f"Error {response}"
 
 # Run URL as a runnable for chains
 def test_url_intel_runnable(pangea_url_intel_guard: PangeaUrlIntelGuard) -> None:
     prompt = "Summarize this: http://113.235.101.11:54384"
-    with pytest.raises(PangeaUrlGuardError, match="Malicious URLs found in the provided input."):
-        pangea_url_intel_guard.invoke(prompt)
+    expected = "Malicious URL(s) found in the provided input."
+    response = pangea_url_intel_guard.invoke(prompt)
+    assert response == expected, f"Error {response}"
 
 # Pangea Prompt Guard integration tests
 @pytest.fixture()

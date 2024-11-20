@@ -2,7 +2,7 @@ import os
 from typing import Optional
 from pydantic import SecretStr
 
-from langchain.tools import BaseTool
+from langchain_community.tools.pangea.base import PangeaBaseTool
 
 try:
     from pangea import PangeaConfig
@@ -20,9 +20,10 @@ class PangeaRedactGuardError(RuntimeError):
         super().__init__(message)
 
 
-class PangeaRedactGuard(BaseTool):
+class PangeaRedactGuard(PangeaBaseTool):
     """
-    This tool guard redacts sensitive information from prompts using the Pangea Redact service.
+    Redact sensitive and high-risk information from prompts, responses, and RAG context data using the Pangea Redact service.
+
     Details of the service can be found here:
         [Redact API Reference docs](https://pangea.cloud/docs/api/redact)
 
@@ -50,11 +51,11 @@ class PangeaRedactGuard(BaseTool):
             redact_guard.invoke("My name is Dennis Nedry and my email is you.didnt.say.the.magic.word@gmail.com")
     """
 
-    """Name of the tool."""
     name: str = "pangea-redact-guard-tool"
+    """Name of the tool."""
 
+    description: str = "Redacts sensitive and high-risk information from prompts, responses, and RAG context data using the Pangea Redact service."
     """Description of the tool."""
-    description: str = "This tool redacts sensitive information from prompts using the Pangea Redact service."
 
     def __init__(
         self,
@@ -81,7 +82,7 @@ class PangeaRedactGuard(BaseTool):
 
         self._redact_client = Redact(token=token.get_secret_value(), config=config, config_id=config_id)
 
-    def _run(self, input_text: str) -> str:
+    def _process_text(self, input_text: str) -> str:
         # Redact the input_text
         redacted = self._redact_client.redact(text=input_text)
 
