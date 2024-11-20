@@ -54,8 +54,12 @@ class PangeaAIGuard(BaseTool):
     """Name of the tool"""
     name: str = "pangea-ai-guard-tool"
 
-    description: str = "Uses Pangea's AI Guard service to monitor, sanitize, and protect sensitive data."
-    """Description of the tool."""
+    """Description of the tool"""
+    description: str = """
+    Identifies and redacts PII and sensitive information in AI prompts, responses, and RAG context data.
+    Detects and blocks malware submitted by users or ingested via agents or RAG file ingestion.
+    Flags or hides malicious IP addresses, domains, and URLs embedded in prompts, responses, or data vectors.
+    """
 
     _client: AIGuard
     _recipe: str
