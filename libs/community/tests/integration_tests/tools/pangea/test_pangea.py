@@ -25,7 +25,7 @@ except ImportError as e:
 def pangea_redact_guard() -> PangeaRedactGuard:
     env = TestEnvironment.DEVELOP
     config = PangeaConfig(domain=get_test_domain(env))
-    return PangeaRedactGuard(pangea_token=SecretStr(get_test_token(env)), config=config)
+    return PangeaRedactGuard(token=SecretStr(get_test_token(env)), config=config)
 
 # Run redact as a tool for agents
 def test_redact_tool(pangea_redact_guard: PangeaRedactGuard) -> None:
@@ -47,7 +47,7 @@ def test_redact_runnable(pangea_redact_guard: PangeaRedactGuard) -> None:
 def pangea_domain_intel_guard() -> PangeaDomainIntelGuard:
     env = TestEnvironment.DEVELOP
     config = PangeaConfig(domain=get_test_domain(env))
-    return PangeaDomainIntelGuard(pangea_token=SecretStr(get_test_token(env)), config=config)
+    return PangeaDomainIntelGuard(token=SecretStr(get_test_token(env)), config=config)
 
 # Run domain as a tool for agents
 def test_domain_intel_tool(pangea_domain_intel_guard: PangeaDomainIntelGuard) -> None:
@@ -66,7 +66,7 @@ def test_domain_intel_runnable(pangea_domain_intel_guard: PangeaDomainIntelGuard
 def pangea_ip_intel_guard() -> PangeaIpIntelGuard:
     env = TestEnvironment.DEVELOP
     config = PangeaConfig(domain=get_test_domain(env))
-    return PangeaIpIntelGuard(pangea_token=SecretStr(get_test_token(env)), config=config)
+    return PangeaIpIntelGuard(token=SecretStr(get_test_token(env)), config=config)
 
 # Run IP as a tool for agents
 def test_ip_intel_tool(pangea_ip_intel_guard: PangeaIpIntelGuard) -> None:
@@ -85,7 +85,7 @@ def test_ip_intel_runnable(pangea_ip_intel_guard: PangeaIpIntelGuard) -> None:
 def pangea_url_intel_guard() -> PangeaUrlIntelGuard:
     env = TestEnvironment.DEVELOP
     config = PangeaConfig(domain=get_test_domain(env))
-    return PangeaUrlIntelGuard(pangea_token=SecretStr(get_test_token(env)), config=config)
+    return PangeaUrlIntelGuard(token=SecretStr(get_test_token(env)), config=config)
 
 # Run URL as a tool for agents
 def test_url_intel_tool(pangea_url_intel_guard: PangeaUrlIntelGuard) -> None:
@@ -104,7 +104,7 @@ def test_url_intel_runnable(pangea_url_intel_guard: PangeaUrlIntelGuard) -> None
 def pangea_prompt_guard() -> PangeaPromptGuard:
     env = TestEnvironment.DEVELOP
     config = PangeaConfig(domain=get_test_domain(env))
-    return PangeaPromptGuard(pangea_token=SecretStr(get_test_token(env)), config=config)
+    return PangeaPromptGuard(token=SecretStr(get_test_token(env)), config=config)
 
 # Run URL as a tool for agents
 def test_prompt_guard_tool(pangea_prompt_guard: PangeaPromptGuard) -> None:
@@ -124,7 +124,7 @@ def test_prompt_guard_runnable(pangea_prompt_guard: PangeaPromptGuard) -> None:
 def pangea_ai_guard() -> PangeaAIGuard:
     env = TestEnvironment.DEVELOP
     config = PangeaConfig(domain=get_test_domain(env))
-    return PangeaAIGuard(pangea_token=SecretStr(get_test_token(env)), config=config, recipe="pangea_ingestion_guard")
+    return PangeaAIGuard(token=SecretStr(get_test_token(env)), config=config, recipe="pangea_ingestion_guard")
 
 # Run URL as a tool for agents
 def test_ai_guard_tool(pangea_ai_guard: PangeaAIGuard) -> None:

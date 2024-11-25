@@ -38,11 +38,11 @@ class PangeaDomainIntelGuard(BaseTool):
             from pydantic import SecretStr
 
             # Initialize parameters
-            pangea_token = SecretStr(os.getenv("PANGEA_DOMAIN_INTEL_TOKEN"))
+            token = SecretStr(os.getenv("PANGEA_DOMAIN_INTEL_TOKEN"))
             config = PangeaConfig(domain="aws.us.pangea.cloud")
 
             # Setup Pangea Domain Intel Tool
-            tool = PangeaDomainIntelGuard(pangea_token=pangea_token, config_id="", config=config)
+            tool = PangeaDomainIntelGuard(token=token, config_id="", config=config)
             tool.run("Please click here to confirm your order:http://737updatesboeing.com/order/123 .  Leave us a feedback here: http://malware123.com/feedback")
     """
 
@@ -58,28 +58,27 @@ class PangeaDomainIntelGuard(BaseTool):
     def __init__(
         self,
         *,
-        pangea_token: Optional[SecretStr] = None,
+        token: Optional[SecretStr] = None,
         config: PangeaConfig | None = None,
         threshold: int = 80,
-        pangea_token_env_key_name: str = "PANGEA_DOMAIN_INTEL_TOKEN",
+        token_env_key_name: str = "PANGEA_DOMAIN_INTEL_TOKEN",
     ) -> None:
         """
         Args:
-            pangea_token: Pangea API token.
+            token: Pangea API token.
             config: PangeaConfig object.
         """
-        # add an option to get the token from vautl
-        # an insecure way is to pass is thro env variable...
-        if not pangea_token:
-            pangea_token = SecretStr(os.getenv(pangea_token_env_key_name, ""))
 
-        if not pangea_token or not pangea_token.get_secret_value() or pangea_token.get_secret_value() == "":
-            raise ValueError(f"'{pangea_token_env_key_name}' must be set or passed")
+        if not token:
+            token = SecretStr(os.getenv(token_env_key_name, ""))
+
+        if not token or not token.get_secret_value() or token.get_secret_value() == "":
+            raise ValueError(f"'{token_env_key_name}' must be set or passed")
 
         super().__init__()
 
         self._threshold = threshold
-        self._domain_intel_client = DomainIntel(token=pangea_token.get_secret_value(), config=config)
+        self._domain_intel_client = DomainIntel(token=token.get_secret_value(), config=config)
 
     def _run(self, input_text: str) -> str:
 
