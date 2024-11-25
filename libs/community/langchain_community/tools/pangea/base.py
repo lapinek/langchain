@@ -42,33 +42,27 @@ class PangeaBaseTool(BaseTool):
         config: Optional[RunnableConfig] = None,
         **kwargs: Any
     ) -> Any:
-        try:
-            # Check if the input is a ToolCall.
-            if isinstance(input, dict) and "name" in input and "args" in input:
-                return super().invoke(input, config, **kwargs)
-            else:
-                # Process the input data.
-                return self._run(input)
-        except Exception as e:
-            raise RuntimeError(f"An error occurred during invocation: {e}") from e
+        # Check if the input is a ToolCall.
+        if isinstance(input, dict) and "name" in input and "args" in input:
+            return super().invoke(input, config, **kwargs)
+        else:
+            # Process the input data.
+            return self._run(input)
 
     def _run(
         self, input_data: Union[str, Dict, ToolCall, BaseMessage, List[BaseMessage], PromptValue]
     ) -> Union[str, Dict, ToolCall, BaseMessage, List[BaseMessage], PromptValue]:
         """Process the input data in a subclass using its _process_text method."""
-        try:
-            if isinstance(input_data, str):
-                return self._process_text(input_data)
-            elif isinstance(input_data, PromptValue):
-                return self._process_prompt_value(input_data)
-            elif isinstance(input_data, BaseMessage):
-                return self._process_single_message(input_data)
-            elif isinstance(input_data, list) and all(isinstance(message, BaseMessage) for message in input_data):
-                return self._process_messages(input_data)
-            else:
-                raise TypeError(f"Unsupported input type: {type(input_data)}")
-        except Exception as e:
-            raise RuntimeError(f"An error occurred during _run: {e}") from e
+        if isinstance(input_data, str):
+            return self._process_text(input_data)
+        elif isinstance(input_data, PromptValue):
+            return self._process_prompt_value(input_data)
+        elif isinstance(input_data, BaseMessage):
+            return self._process_single_message(input_data)
+        elif isinstance(input_data, list) and all(isinstance(message, BaseMessage) for message in input_data):
+            return self._process_messages(input_data)
+        else:
+            raise TypeError(f"Unsupported input type: {type(input_data)}")
 
     def _process_text(self, text: str) -> str:
         """Process a string input."""
@@ -77,39 +71,30 @@ class PangeaBaseTool(BaseTool):
 
     def _process_prompt_value(self, prompt_value: PromptValue) -> PromptValue:
         """Process a PromptValue."""
-        try:
-            if isinstance(prompt_value, ChatPromptValue):
-                # For ChatPromptValue, process the messages.
-                processed_messages = self._process_messages(prompt_value.to_messages())
+        if isinstance(prompt_value, ChatPromptValue):
+            # For ChatPromptValue, process the messages.
+            processed_messages = self._process_messages(prompt_value.to_messages())
 
-                # Reconstruct the ChatPromptValue with the processed messages.
-                return ChatPromptValue(messages=processed_messages)
-            else:
-                # For other PromptValue types, process the string representation.
-                processed_text = self._process_text(prompt_value.to_string())
+            # Reconstruct the ChatPromptValue with the processed messages.
+            return ChatPromptValue(messages=processed_messages)
+        else:
+            # For other PromptValue types, process the string representation.
+            processed_text = self._process_text(prompt_value.to_string())
 
-                # Reconstruct the PromptValue with the processed content.
-                return StringPromptValue(text=processed_text)
-        except Exception as e:
-            raise RuntimeError(f"An error occurred processing a PromptValue: {e}") from e
+            # Reconstruct the PromptValue with the processed content.
+            return StringPromptValue(text=processed_text)
 
     def _process_single_message(self, message: BaseMessage) -> BaseMessage:
         """Process a single message."""
-        try:
-            # Get all the attributes of the message as a dictionary.
-            message_dict = message.__dict__.copy()
+        # Get all the attributes of the message as a dictionary.
+        message_dict = message.__dict__.copy()
 
-            # Process the message content.
-            message_dict['content'] = self._process_text(message.content)
+        # Process the message content.
+        message_dict['content'] = self._process_text(message.content)
 
-            # Create a new instance of the message with the processed content.
-            return message.__class__(**message_dict)
-        except Exception as e:
-            raise RuntimeError(f"An error occurred processing a message: {e}") from e
+        # Create a new instance of the message with the processed content.
+        return message.__class__(**message_dict)
 
     def _process_messages(self, messages: List[BaseMessage]) -> List[BaseMessage]:
         """Process a list of messages."""
-        try:
-            return [self._process_single_message(message) for message in messages]
-        except Exception as e:
-            raise RuntimeError(f"An error occurred processing messages: {e}") from e
+        return [self._process_single_message(message) for message in messages]
