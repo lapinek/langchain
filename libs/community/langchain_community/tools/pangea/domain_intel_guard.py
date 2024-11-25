@@ -1,6 +1,6 @@
 import os
 import re
-from langchain.tools import BaseTool
+from langchain_community.tools.pangea.base import PangeaBaseTool
 
 from pydantic import SecretStr
 from typing import Optional, ClassVar
@@ -16,12 +16,12 @@ except ImportError as e:
 
 class PangeaDomainGuardError(RuntimeError):
     """
-    Exception raised for unexpected scenarios or when malicious IPs are found.
+    Exception raised for unexpected scenarios.
     """
     def __init__(self, message: str) -> None:
         super().__init__(message)
 
-class PangeaDomainIntelGuard(BaseTool):
+class PangeaDomainIntelGuard(PangeaBaseTool):
     """
     This tool guard finds malicious domains in the input text using the Pangea Domain Intel service.
     Details of the service can be found here:
@@ -53,7 +53,7 @@ class PangeaDomainIntelGuard(BaseTool):
     description: str = "This tool finds malicious domains in the input text using the Pangea Domain Intel service."
 
     _threshold: int = 80
-    _domain_pattern: ClassVar[str] = r"https?://(?:www\.)?([a-zA-Z0-9.-]+)(?::\d+)?"
+    _domain_pattern: ClassVar[str] = r"\b(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}\b"
 
     def __init__(
         self,
@@ -80,7 +80,7 @@ class PangeaDomainIntelGuard(BaseTool):
         self._threshold = threshold
         self._domain_intel_client = DomainIntel(token=token.get_secret_value(), config=config)
 
-    def _run(self, input_text: str) -> str:
+    def _process_text(self, input_text: str) -> str:
 
         # Find all Domains using the regex pattern
         domains = re.findall(self._domain_pattern, input_text)
@@ -97,7 +97,7 @@ class PangeaDomainIntelGuard(BaseTool):
 
         # Check if the score is higher than the set threshold for any domain
         if any(domain_data.score >= self._threshold for domain_data in intel.result.data.values()):
-            raise PangeaDomainGuardError("Malicious domains found in the provided input.")
+            input_text = "Malicious domains found in the provided input."
 
         # Return unchanged input_text
         return input_text
