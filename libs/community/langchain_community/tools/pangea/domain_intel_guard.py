@@ -14,7 +14,7 @@ except ImportError as e:
     ) from e
 
 
-class PangeaDomainGuardError(RuntimeError):
+class PangeaDomainIntelGuardError(RuntimeError):
     """
     Exception raised for unexpected scenarios.
     """
@@ -93,7 +93,7 @@ class PangeaDomainIntelGuard(PangeaBaseTool):
         intel = self._domain_intel_client.reputation_bulk(domains)
 
         if not intel.result:
-            raise PangeaDomainGuardError("Result is invalid or missing")
+            raise PangeaDomainIntelGuardError("Result is invalid or missing")
 
         # Check if the score is higher than the set threshold for any domain
         if any(domain_data.score >= self._threshold for domain_data in intel.result.data.values()):
