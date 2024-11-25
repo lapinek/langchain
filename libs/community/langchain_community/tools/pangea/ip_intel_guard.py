@@ -1,6 +1,6 @@
 import os
 import re
-from langchain.tools import BaseTool
+from langchain_community.tools.pangea.base import PangeaBaseTool
 
 from pydantic import SecretStr
 from typing import Optional, ClassVar
@@ -22,7 +22,7 @@ class PangeaIpGuardError(RuntimeError):
         super().__init__(message)
 
 
-class PangeaIpIntelGuard(BaseTool):
+class PangeaIpIntelGuard(PangeaBaseTool):
     """
     This tool guard finds malicious ips in the input text using the Pangea IP Intel service.
     Details of the service can be found here:
@@ -81,7 +81,7 @@ class PangeaIpIntelGuard(BaseTool):
         self._threshold = threshold
         self._ip_intel_client = IpIntel(token=token.get_secret_value(), config=config)
 
-    def _run(self, input_text: str) -> str:
+    def _process_text(self, input_text: str) -> str:
 
         # Find all IPs using the regex pattern
         ips = re.findall(self._ip_pattern, input_text)
@@ -98,7 +98,7 @@ class PangeaIpIntelGuard(BaseTool):
 
         # Check if the score is higher than the set threshold for any ip
         if any(ip_data.score >= self._threshold for ip_data in intel.result.data.values()):
-            raise PangeaIpGuardError("Malicious IPs found in the provided input.")
+            input_text = "Malicious IPs found in the provided input."
 
         # Return unchanged input_text
         return input_text
