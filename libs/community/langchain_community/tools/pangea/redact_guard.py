@@ -54,7 +54,7 @@ class PangeaRedactGuard(PangeaBaseTool):
     name: str = "pangea-redact-guard-tool"
 
     """Description of the tool."""
-    description: str = "This tool redacts sensitive information from prompts using the Pangea Redact service."
+    description: str = "Redacts sensitive information from prompts, responses, and RAG context data using the Pangea Redact service."
 
     def __init__(
         self,
