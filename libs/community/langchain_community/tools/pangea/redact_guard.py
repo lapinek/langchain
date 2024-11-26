@@ -2,7 +2,7 @@ import os
 from typing import Optional
 from pydantic import SecretStr
 
-from langchain.tools import BaseTool
+from langchain_community.tools.pangea.base import PangeaBaseTool
 
 try:
     from pangea import PangeaConfig
@@ -20,7 +20,7 @@ class PangeaRedactGuardError(RuntimeError):
         super().__init__(message)
 
 
-class PangeaRedactGuard(BaseTool):
+class PangeaRedactGuard(PangeaBaseTool):
     """
     This tool guard redacts sensitive information from prompts using the Pangea Redact service.
     Details of the service can be found here:
@@ -81,7 +81,7 @@ class PangeaRedactGuard(BaseTool):
 
         self._redact_client = Redact(token=token.get_secret_value(), config=config, config_id=config_id)
 
-    def _run(self, input_text: str) -> str:
+    def _process_text(self, input_text: str) -> str:
         # Redact the input_text
         redacted = self._redact_client.redact(text=input_text)
 
