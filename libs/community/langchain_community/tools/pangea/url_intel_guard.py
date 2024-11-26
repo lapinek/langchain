@@ -1,6 +1,6 @@
 import os
 import re
-from langchain.tools import BaseTool
+from langchain_community.tools.pangea.base import PangeaBaseTool
 
 from pydantic import SecretStr
 from typing import Optional, ClassVar
@@ -22,7 +22,7 @@ class PangeaUrlGuardError(RuntimeError):
         super().__init__(message)
 
 
-class PangeaUrlIntelGuard(BaseTool):
+class PangeaUrlIntelGuard(PangeaBaseTool):
     """
     This tool finds malicious urls in the input text using the Pangea URL Intel service.
     Details of the service can be found here:
@@ -54,7 +54,7 @@ class PangeaUrlIntelGuard(BaseTool):
     description: str = "This tool finds malicious urls in the input text using the Pangea URL Intel service."
 
     _threshold: int = 80
-    _url_pattern: ClassVar[str] = r"(https?://(?:[a-zA-Z0-9.-]+|(?:\d{1,3}\.){3}\d{1,3})(?::\d+)?)(?:/|$)"
+    _url_pattern: ClassVar[str] = r"https?://(?:[-\w.]|%[\da-fA-F]{2})+(?::\d+)?(?:/[\w./?%&=-]*)?(?<!\.)"
 
     def __init__(
         self,
@@ -81,7 +81,7 @@ class PangeaUrlIntelGuard(BaseTool):
         self._threshold = threshold
         self._url_intel_client = UrlIntel(token=token.get_secret_value(), config=config)
 
-    def _run(self, input_text: str) -> str:
+    def _process_text(self, input_text: str) -> str:
 
         # Find all URLs using the regex pattern
         urls = re.findall(self._url_pattern, input_text)
@@ -98,7 +98,7 @@ class PangeaUrlIntelGuard(BaseTool):
 
         # Check if the score is higher than the set threshold for any url
         if any(url_data.score >= self._threshold for url_data in intel.result.data.values()):
-            raise PangeaUrlGuardError("Malicious URLs found in the provided input.")
+            input_text = "Malicious URLs found in the provided input."
 
         # Return unchanged input_text
         return input_text
