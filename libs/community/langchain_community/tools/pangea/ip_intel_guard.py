@@ -51,7 +51,7 @@ class PangeaIpIntelGuard(PangeaBaseTool):
     name: str = "pangea-ip-intel-guard-tool"
 
     """Description of the tool."""
-    description: str = "This tool finds malicious ips in the input text using the Pangea Ip Intel service."
+    description: str = "Detects malicious IP addresses in the input text using the Pangea IP Intel service."
 
     _threshold: int = 80
     _ip_pattern: ClassVar[str] = r"\b(?:\d{1,3}\.){3}\d{1,3}\b"
