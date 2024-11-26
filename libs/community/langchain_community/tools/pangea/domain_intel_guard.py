@@ -50,7 +50,7 @@ class PangeaDomainIntelGuard(PangeaBaseTool):
     name: str = "pangea-domain-intel-guard-tool"
 
     """Description of the tool."""
-    description: str = "This tool finds malicious domains in the input text using the Pangea Domain Intel service."
+    description: str = "Detects malicious domains in the input text using the Pangea Domain Intel service."
 
     _threshold: int = 80
     _domain_pattern: ClassVar[str] = r"\b(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}\b"
